@@ -2,7 +2,8 @@
 
 ![Letters to Future Self](screenshot.png)
 
-I've always journaled. There's something about writing to a future version of yourself that hits differently — futureme.org does this but I wanted to build my own, something that actually feels like writing a letter.
+I've always journaled. There's something about writing to a future version of yourself that hits differently. 
+Futureme.org does this but I wanted to build my own, something that actually feels like writing a letter.
 
 So here it is. Write, pick a date, seal it. Open it when the time comes.
 
