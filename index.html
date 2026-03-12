@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Letters to Future Self</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Ambient background layers -->
+  <div class="bg-layer bg-stars" id="bgStars"></div>
+  <div class="bg-layer bg-nebula"></div>
+  <div class="bg-layer bg-vignette"></div>
+  <div class="floating-particles" id="particles"></div>
+
+  <!-- Candle flicker light -->
+  <div class="candle-glow" id="candleGlow"></div>
+
+  <!-- Header -->
+  <header class="site-header" id="siteHeader">
+    <div class="header-ornament">✦</div>
+    <h1 class="site-title">
+      <span class="title-line-1">Letters to</span>
+      <span class="title-line-2">Future Self</span>
+    </h1>
+    <p class="site-subtitle">Seal your words today &mdash; receive them when the time comes</p>
+    <div class="header-rule">
+      <span class="rule-line"></span>
+      <span class="rule-diamond">◆</span>
+      <span class="rule-line"></span>
+    </div>
+  </header>
+
+  <!-- Nav -->
+  <nav class="main-nav" id="mainNav">
+    <button class="nav-btn active" data-tab="write" onclick="switchTab('write')">
+      <span class="nav-icon">✍</span>
+      <span>Write a Letter</span>
+    </button>
+    <div class="nav-divider">|</div>
+    <button class="nav-btn" data-tab="vault" onclick="switchTab('vault')">
+      <span class="nav-icon">📜</span>
+      <span>My Letters</span>
+      <span class="letter-count" id="letterCount"></span>
+    </button>
+  </nav>
+
+  <!-- Main content -->
+  <main class="main-content">
+
+    <!-- ── WRITE TAB ── -->
+    <section class="tab-panel active" id="tab-write">
+      <div class="paper-wrapper">
+        <div class="paper-shadow"></div>
+        <div class="paper" id="writePaper">
+
+          <div class="paper-header">
+            <div class="paper-date" id="todayDate"></div>
+            <div class="paper-ornament">~ ~ ~</div>
+          </div>
+
+          <div class="form-field">
+            <label class="field-label">To</label>
+            <input class="field-input" type="text" id="recipient"
+              placeholder="My dearest future self, five years from now…" autocomplete="off" />
+            <div class="field-line"></div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-field">
+              <label class="field-label">Your Name</label>
+              <input class="field-input" type="text" id="author" placeholder="Your name" autocomplete="off" />
+              <div class="field-line"></div>
+            </div>
+            <div class="form-field">
+              <label class="field-label">Email <span class="label-note">(optional reminder)</span></label>
+              <input class="field-input" type="email" id="email" placeholder="you@example.com" autocomplete="off" />
+              <div class="field-line"></div>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label class="field-label">Deliver on</label>
+            <input class="field-input date-input" type="date" id="deliveryDate" />
+            <div class="field-line"></div>
+            <div class="delivery-preview" id="deliveryPreview"></div>
+          </div>
+
+          <div class="form-field letter-field">
+            <label class="field-label">Your Letter</label>
+            <div class="textarea-wrap">
+              <textarea class="field-textarea" id="letterBody"
+                placeholder="Dear future me,&#10;&#10;By the time you read this, I wonder if you still remember…"></textarea>
+              <div class="line-guide" aria-hidden="true" id="lineGuide"></div>
+            </div>
+            <div class="char-count" id="charCount">0 words</div>
+          </div>
+
+          <div class="paper-footer">
+            <div class="signature-line">
+              <span class="sig-from">From your past self,</span>
+              <span class="sig-name" id="sigName">____________________</span>
+            </div>
+            <button class="seal-btn" id="sealBtn" onclick="sealLetter()">
+              <span class="seal-wax">🕯️</span>
+              <span class="seal-text">Seal &amp; Save Letter</span>
+              <span class="seal-icon">⊛</span>
+            </button>
+          </div>
+
+        </div><!-- /paper -->
+      </div><!-- /paper-wrapper -->
+    </section>
+
+    <!-- ── VAULT TAB ── -->
+    <section class="tab-panel" id="tab-vault">
+      <div class="vault-header">
+        <h2 class="vault-title">Your Sealed Letters</h2>
+        <p class="vault-subtitle">Click a letter to open it — if the time has come</p>
+      </div>
+
+      <div class="letters-grid" id="lettersGrid"></div>
+
+      <div class="vault-empty hidden" id="vaultEmpty">
+        <div class="empty-quill">🪶</div>
+        <p class="empty-text">No letters sealed yet.</p>
+        <p class="empty-sub">Write your first letter to the future.</p>
+        <button class="empty-cta" onclick="switchTab('write')">Begin Writing →</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── READ MODAL ── -->
+  <div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
+    <div class="modal-paper" id="modalPaper">
+      <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+
+      <div class="modal-scroll" id="modalScroll">
+        <div class="modal-stamp" id="modalStamp"></div>
+        <div class="modal-meta" id="modalMeta"></div>
+        <div class="modal-body" id="modalBody"></div>
+        <div class="modal-sig" id="modalSig"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
